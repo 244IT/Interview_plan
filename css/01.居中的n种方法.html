@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* 1 */
+    #item1{
+      width: 200px;
+      height: 200px;
+      position: relative;
+      background-color: skyblue;
+
+    }
+    #item1 div{
+      width: 100px;
+      height: 100px;
+      position: absolute;
+      background-color: yellow;
+      top: 50%;
+      left: 50%;
+      margin-top: -50px;
+      margin-left: -50px;
+    }
+    /* 2 */
+    #item2{
+      width: 200px;
+      height: 200px;
+      position: relative;
+      background-color: skyblue;
+
+    }
+    #item2 div{
+      width: 100px;
+      height: 100px;
+      position: absolute;
+      background-color: yellow;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    /* 3 */
+    #item3{
+      width: 200px;
+      height: 200px;
+      position: relative;
+      background-color: skyblue;
+
+    }
+    #item3 div{
+      width: 100px;
+      height: 100px;
+      position: absolute;
+      background-color: yellow;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      margin: auto;
+    }
+    /* 4 */
+    #item4{
+      width: 200px;
+      height: 200px;
+      background-color: skyblue;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #item4 div{
+      width: 100px;
+      height: 100px;
+      background-color: yellow;
+    }
+    /* 5 */
+    #item5{
+      width: 200px;
+      height: 200px;
+      background-color: skyblue;
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+    }
+    #item5 div{
+      width: 100px;
+      height: 100px;
+      background-color: yellow;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- 水平垂直居中 -->
+  <div id="container1">
+    父相子绝，margin-top,margin-left=-50%
+    <div id="item1">
+      <div></div>
+    </div>
+  </div>
+  <div id="container2">
+    父相子绝，transform:translate
+    <div id="item2">
+      <div></div>
+    </div>
+  </div>
+  <div id="container3">
+    父相子绝，四方向0,margin:auto
+    <div id="item3">
+      <div></div>
+    </div>
+  </div>
+  <div id="container4">
+    flex布局
+    <div id="item4">
+      <div></div>
+    </div>
+  </div>
+  <div id="container5">
+    利用内联样式
+    <div id="item5">
+      <div></div>
+    </div>
+  </div>
+</body>
+</html>
