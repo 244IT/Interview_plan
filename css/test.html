@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #container{
+      width: 100%;
+      overflow: hidden;
+    }
+    #left,#right,#con_center{
+      float: left;
+    } 
+    #container .item{
+      height: 300px;
+    }
+    #center{
+      background-color: blue;
+    }
+    #left{
+      width: 300px;
+      background-color: yellow;
+      margin-left: -100%;
+    }
+    #right{
+      width: 300px;
+      background-color: red;
+      margin-left: -300px;
+    }
+    #con_center{
+      width: 100%;
+    }
+
+    #container1{
+      padding: 0px 300px;
+    }
+    #container1 .column{
+      float: left;
+      height: 300px;
+      position: relative;
+    }
+    #center1{
+      background-color: yellowgreen;
+      width: 100%;
+    }
+    #left1{
+      width: 300px;
+      background-color: skyblue;
+      margin-left: -100%;
+      right: 300px;
+    }
+    #right1{
+      width: 300px;
+      background-color: blue;
+      margin-left: -300px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="con_center">
+      <div id="center" class="item">center</div>
+    </div>
+    <div id="left" class="item">left</div>
+    <div id="right" class="item">right</div>
+  </div>
+
+  <div id="container1">
+    <div id="center1" class="column">#center</div>
+    <div id="left1" class="column">#left</div>
+    <div id="right1" class="column">#right</div>
+  </div>
+</body>
+</html>
