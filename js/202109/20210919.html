@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+
+    /* 手写bind */
+    var name = 'window'
+    const obj = {
+        name: 'james'
+    }
+
+    function getName(age, school) {
+        console.log(this.name)
+        console.log(age, school)
+        this.name = '111'
+        return 234
+    }
+
+    getName.prototype.prototypeName = 'getName'
+
+    const bindFisrtResult = getName.bind(obj, 12)
+    // const bindLastResult = bindFisrtResult('清华大学')
+    const bindLastResult = new bindFisrtResult('清华大学')
+    console.log(bindLastResult)
+
+
+
+    // const bindFisrtResult = getName.bind(obj, 12)
+    // const bindLastResult = bindFisrtResult('清华大学')
+    // console.log(bindLastResult)
+
+    Function.prototype.myBind1 = function (target, ...args1) {
+        target.fn = this
+        return function (...args2) {
+            // console.log(fn, this)
+            // console.log(this instanceof fn)
+            const result = target.fn(...args1, ...args2)
+            delete target.fn
+            return result
+        }
+    }
+
+
+    Function.prototype.myBind2 = function (target, ...args1) {
+        target.fn = this
+        return function F(...args2) {
+            const result = this instanceof F ? new target.fn(...args1, ...args2) : target.fn(...args1, ...args2)
+            delete target.fn
+            return result
+        }
+    }
+
+    const arr1 = [1, 2, 3, 4]
+    const arr2 = [...arr1]
+    // console.log(arr2)
+    // arr2[0] = 2
+    // console.log(arr1, arr2)
+    function setArr(...args) {
+
+    }
+
+    // const bindFisrtResult = getName.bind(obj, 12)
+    // const bindLastResult = bindFisrtResult('清华大学')
+    // console.log(bindLastResult)
+
+    // const bindFisrtResult = getName.bind(obj, 12)
+    // const bindInstance = new bindFisrtResult('清华大学')
+    // const bindLastResult = bindFisrtResult('清华大学')
+    // console.log(bindLastResult)
+
+    Function.prototype.bind2 = function (context) {
+
+        if (typeof this !== "function") {
+            throw new Error("Function.prototype.bind - what is trying to be bound is not callable");
+        }
+
+        var self = this;
+        var args = Array.prototype.slice.call(arguments, 1);
+        var fNOP = function () { };
+
+        var fbound = function () {
+            self.apply(this instanceof self ? this : context, args.concat(Array.prototype.slice.call(arguments)));
+        }
+
+        fNOP.prototype = this.prototype;
+        fbound.prototype = new fNOP();
+
+        return fbound;
+
+    }
+
+    Function.prototype.myBind3 = function (context) {
+        var _this = this
+        var args = [...arguments].slice(1)
+        // 返回一个函数
+        return function F() {
+            // 因为返回了一个函数，我们可以 new F()，所以需要判断
+            if (this instanceof F) {
+                return new _this(...args, ...arguments)
+            }
+            return _this.apply(context, args.concat(...arguments))
+        }
+    }
+
+
+
+    // const bindFisrtResult = getName.myBind2(obj, 12)
+    // const bindLastResult = bindFisrtResult('清华大学')
+    // const bindLastResult = new bindFisrtResult('清华大学')
+    // console.log(bindLastResult)
+
+
+
+</script>
+
+</html>
