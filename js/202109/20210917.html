@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="btn">点击</div>
+    <script>
+        /* 今日任务：节流，call，apply，bind，深拷贝，浅拷贝 */
+        const btn = document.querySelector("#btn")
+        btn.addEventListener('click', throttle(function () {
+            console.log('click')
+        }, 1000))
+        /* 节流 */
+
+        function throttle(fn, wait) {
+            let lastTime = 0
+            return function (...args) {
+                const now = +Date.now()
+                if (now - lastTime > wait) {
+                    fn.apply(this, args)
+                    lastTime = now
+                }
+            }
+        }
+
+        function throttle2(fn, wait) {
+            let timer = null
+            return function (...args) {
+                if (timer) return
+                timer = setTimeout(() => {
+                    fn.apply(this, args)
+                    timer = null
+                }, wait)
+            }
+        }
+
+        const obj = {
+            name: 'james'
+        }
+        var name = 'window'
+        function getName(num, school) {
+            console.log(this.name, num, school)
+            return 1
+        }
+
+
+
+        Function.prototype.myCall = function (target = window, ...args) {
+            const fn = this // 拿到目标函数
+            target.fn = fn
+            const result = target.fn(...args)
+            delete target.fn
+            return result
+        }
+
+
+        const callRetrun = getName.myCall()
+        console.log(callRetrun)
+
+        Function.prototype.myApply = function (target = window, args = []) {
+            const fn = this // 拿到目标函数
+            target.fn = fn
+            const result = target.fn(...args)
+            delete target.fn
+            return result
+        }
+
+        const applyReturn = getName.myApply()
+        console.log(applyReturn)
+
+        const obj2 = {
+            name: 'curry',
+            age: 18,
+            friend: {
+                name: 'green',
+                age: 20,
+                friend: {
+                    name: 'jame',
+                    age: 30
+                }
+            }
+        }
+
+        function sallowCopy(obj) {
+            if (typeof obj !== 'object' || obj === null) {
+                throw new Error('must be a object')
+            }
+            const newObj = obj instanceof Array ? [] : {}
+            for (let prop in obj) {
+                if (obj.hasOwnProperty(prop)) {
+                    newObj[prop] = obj[prop]
+                }
+            }
+            return newObj
+        }
+
+        function deepCopy(obj) {
+            if (typeof obj !== 'object' || obj === null) {
+                throw new Error('must be a object')
+            }
+            const newObj = obj instanceof Array ? [] : {}
+            for (let prop in obj) {
+                if (obj.hasOwnProperty(prop)) {
+                    newObj[prop] = typeof obj[prop] === 'object' ? deepCopy(obj[prop]) : obj[prop]
+                }
+            }
+            return newObj
+        }
+
+
+
+        const newObj = deepCopy(null)
+        console.log(newObj)
+        obj2.friend.name = 'kelly'
+        console.log(obj2)
+        console.log(newObj)
+    </script>
+</body>
+
+</html>
