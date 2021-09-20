@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="./promise.js"></script>
+    <script>
+
+        function doA(fn) {
+            console.log('doA')
+            fn()
+        }
+        function doF() {
+            console.log('doF')
+        }
+        function doB() {
+            console.log('doB')
+        }
+        function doC(fn) {
+            console.log('doC')
+            fn()
+        }
+        function doD() {
+            console.log('doD')
+        }
+        function doE() {
+            console.log('doE')
+        }
+
+        doA(function () {
+            doB();
+
+            doC(function () {
+                doD();
+            })
+
+            doE();
+        });
+
+        doF();
+
+        // const promise = new MyPromise((resolve, reject) => {
+        //     resolve('111')
+        // })
+
+        // console.log(promise)
+
+        const promise = new Promise((resolve, reject) => {
+            resolve(1)
+            resolve(2)
+            console.log(123)
+        })
+
+        promise.then(res => {
+            console.log(res)
+        })
+    </script>
+</body>
+
+</html>
