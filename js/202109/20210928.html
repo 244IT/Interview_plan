@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id="btn">点击</div>
+    <script>
+        // 防抖
+        function debounce(fn, wait = 1000, immediate = true) {
+            let timer = null
+            return function(...args) {
+                if(timer) clearTimeout(timer)
+
+                if(immediate) {
+                    console.log(timer)
+                    const isNow = !timer
+                    timer = setTimeout(() => {
+                        console.log('赋值')
+                        timer = null
+                    }, wait)
+                    if(isNow) fn.call(this, ...args)
+                }else {
+                    
+                    timer = setTimeout(() => {
+                        fn.call(this, ...args)
+                    }, wait)
+                }
+               
+            }
+        }
+
+        // 节流
+        function throlle(fn , wait = 1000) {
+            let prevTime = 0
+            return function(...args) {
+                const now = Date.now()
+                if(now - prevTime > wait) {
+                    fn.apply(this, args)
+                    prevTime = now
+                }
+            }
+        }
+
+
+
+        const btn = document.querySelector('#btn')
+
+        btn.addEventListener('click', throlle(function (res) {
+            console.log(res)
+            console.log('点击')
+            console.log(this)
+        }))
+
+        // call
+        Function.prototype.myCall = function(target = window, ...args) {
+            const fn = this 
+            target.fn = fn
+            const res = target.fn(...args)
+            delete target.fn
+            return res
+        }
+
+        // apply
+        Function.prototype.myApply = function(target = window, args = []) {
+            const fn = this 
+            target.fn = fn
+            const res = target.fn(...args)
+            delete target.fn
+            return res
+        }
+
+        // bind
+        Function.prototype.myBind = function(target, ...args1) {
+            const fn = this
+            target.fn = fn
+            return function F(...args2) {
+                let res
+                if(this instanceof F) {
+                    res = new fn(...args1, ...args2)
+                }else {
+                    res = target.fn(...args1, ...args2)
+                }
+                delete target.fn
+                return res
+            }
+        }
+        var name = 'curry'
+        const obj = {
+            name: 'james'
+        }
+
+        function getName(age, school) {
+            this.address = '街道'
+            console.log(this.name)
+            console.log(age)
+            console.log(school)
+            return 111
+        }
+        const bindResult = getName.myBind(obj, 18)
+    
+        console.log(new bindResult('清华大学'))
+
+        // 手写深浅拷贝
+        const obj1 = {
+            name: 'james',
+            age: 13,
+            friend: {
+                name: 'curry',
+                age: 11
+            }
+        }
+
+        function shallowCopy(obj) {
+            if(typeof obj !== 'object') {
+                throw new Error('params must be a object')
+                return
+            }
+            const newObj = obj instanceof Array ? [] : {}
+
+            for(let key in obj) {
+                if(obj.hasOwnProperty(key)) {
+                    console.log('赋值')
+                    newObj[key] = typeof obj[key] === 'object' ? shallowCopy(obj[key]) : obj[key]
+                }
+            }
+
+            return newObj
+        }
+        const obj2 = shallowCopy(obj1)
+        obj1.friend.name = 'durent'
+        console.log(obj2)
+
+
+        // 寄生组合继承
+
+        function Parent(name, age) {
+            this.name = name
+            this.age = age
+            this.address = '北京'
+        }
+        Parent.prototype.getName = function() {}
+
+        function Child(name, age, school) {
+            Parent.call(this, name, age)
+            this.school = school
+        }
+        const parent = new Parent('curry', 15)
+        
+
+        function Fn(params) {}
+        Fn.prototype = Parent.prototype
+        // Child.prototype = new Parent()
+        Child.prototype.constructor = Child
+        Child.prototype.getAge = function (params) {}
+
+        const child = new Child('james', 13, '清华大学')
+        console.log(child) 
+
+    </script>
+</body>
+</html>
