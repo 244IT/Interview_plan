@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="home">
+      <h2>首页</h2>
+      <button id="btn">hash跳转搜索页</button>
+      <button id="btn2">history跳转搜索页</button>
+    </div>
+    <div id="search" style="display: none">
+      <h2>搜索页</h2>
+    </div>
+    <script>
+      // hash原理，js实现
+      window.onhashchange = function (event) {
+        console.log("onhashchange");
+        console.log(location.hash);
+        console.log(event.newURL);
+        console.log(event.oldURL);
+        const hash = location.hash;
+        if (hash === "#home") {
+          home.style.display = "block";
+          search.style.display = "none";
+        }
+        if (hash === "#search") {
+          home.style.display = "none";
+          search.style.display = "block";
+        }
+      };
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log("DOMContentLoaded");
+        console.log(location.hash);
+        const hash = location.hash;
+        // 重定向
+        // if (!hash) {
+        //   location.href = "#home";
+        // }
+        // if (location.hash === "#home") {
+        //   home.style.display = "block";
+        // }
+      });
+      btn.addEventListener("click", () => {
+        location.href = "#search";
+      });
+
+      // history原理，js实现
+
+      window.onpopstate = function (event) {
+        console.log("onpopstate");
+        console.log(event);
+      };
+
+      btn2.addEventListener("click", function (event) {
+        history.pushState({}, null, "search");
+      });
+    </script>
+  </body>
+</html>

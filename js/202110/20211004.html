@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // 手写promise简易版
+
+    class MyPromise {
+      static PENDING = "pending";
+      static REJECTED = "rejected";
+      static FULFILLED = "fulfilled";
+
+      constructor(cb) {
+        this.status = MyPromise.PENDING;
+        this.result = "";
+        this.resolveCallbacks = [];
+        this.rejectCallbacks = [];
+
+        try {
+          cb(MyPromise.resolve.bind(this), MyPromise.reject.bind(this));
+        } catch (err) {
+          MyPromise.reject.call(this, err);
+        }
+      }
+
+      static resolve(res) {
+        setTimeout(() => {
+          if (this.status === MyPromise.PENDING) {
+            this.status = MyPromise.FULFILLED;
+            this.result = res;
+
+            this.resolveCallbacks.forEach((onResolve) => {
+              onResolve(this.result);
+            });
+          }
+        });
+      }
+      static reject(err) {
+        setTimeout(() => {
+          if (this.status === MyPromise.PENDING) {
+            this.status = MyPromise.REJECTED;
+            this.result = err;
+
+            this.rejectCallbacks.forEach((onReject) => {
+              onReject(this.result);
+            });
+          }
+        });
+      }
+
+      then(onResolve, onReject) {
+        return new MyPromise(() => {
+          onResolve = typeof onResolve === "function" ? onResolve : () => {};
+          onReject = typeof onReject === "function" ? onReject : () => {};
+          if (this.status === MyPromise.PENDING) {
+            this.resolveCallbacks.push(onResolve);
+            this.rejectCallbacks.push(onReject);
+          }
+          if (this.status === MyPromise.FULFILLED) {
+            setTimeout(() => {
+              onResolve(this.result);
+            });
+          }
+          if (this.status === MyPromise.REJECTED) {
+            setTimeout(() => {
+              onReject(this.result);
+            });
+          }
+        });
+      }
+    }
+    console.log("第一步");
+    const promise = new Promise((resolve, reject) => {
+      //   console.log("第二步");
+      //   resolve("第三步");
+      //   setTimeout(() => {
+      //     resolve("第三步");
+      //     console.log("第五步");
+      //   }, 1000);
+    });
+
+    // promise
+    //   .then(
+    //     (res) => {
+    //       console.log("resolve1:" + res);
+    //     },
+    //     (err) => {
+    //       console.log("reject1:" + err);
+    //     }
+    //   )
+    //   .then((res) => {
+    //     console.log("then2" + res);
+    //   });
+
+    const promise2 = new MyPromise((resolve, reject) => {
+      console.log("第二步");
+      resolve("第三步");
+      //   setTimeout(() => {
+      //     resolve("第三步");
+      //     console.log("第五步");
+      //   }, 1000);
+    });
+
+    promise2
+      .then(
+        (res) => {
+          console.log("resolve2:" + res);
+        },
+        (err) => {
+          console.log("reject2:" + err);
+        }
+      )
+      .then((res) => {
+        console.log("then2" + res);
+      });
+    // promise2;
+    console.log("第四步");
+  </script>
+</html>
